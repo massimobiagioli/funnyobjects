@@ -56,7 +56,9 @@ class REST_Model extends CI_Model {
             
             $query = $this->db->get();  
             
-            return $this->transformResultList($query->result());
+            $countQueryResult = $this->countQuery($queryData);
+            
+            return $this->transformResultList($query->result(), $queryData, $countQueryResult->RC);
         } catch (Exception $ex) {
             log_message('error', $ex->getMessage());
             return false;
@@ -155,10 +157,17 @@ class REST_Model extends CI_Model {
     /**
      * Trasforma lista risultati
      * @param array $results Risultati da trasformare
+     * @param array $queryData QueryData
+     * @param array $rowCount Numero record
      * @return array Risultati dopo la trasformazione
      */    
-    private function transformResultList($results) {
-        return array_map(array($this, 'transformResultRow'), $results);
+    private function transformResultList($results, $queryData, $rowCount) {
+        return [
+            'current' => ($queryData->limit ? ($queryData->offset === 0 ? 1 : ((int)$queryData->offset / $queryData->limit) + 1) : 0),
+            'rowCount' => ($queryData->limit ? $queryData->limit : $rowCount),
+            'rows' => array_map(array($this, 'transformResultRow'), $results),
+            'total' => $rowCount
+        ];
     }
     
     public function getTableName() {
