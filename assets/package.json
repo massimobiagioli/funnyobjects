@@ -26,6 +26,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "dateformat": "^1.0.12",
     "install": "^0.8.1",
     "npm": "^3.10.5",
     "vue": "^1.0.26",

@@ -29,9 +29,9 @@
 export default {
     vuex: {
         actions: {
-    },
-    getters: {
+        },
+        getters: {
+        }
     }
-  }
 }
 </script>
