@@ -54,7 +54,7 @@
                         
                         <!-- Dati principali -->
 
-                        <div class="input-group">
+                        <div class="input-group" v-if="actionName === 'edit'">
                             <span class="input-group-addon input-group-addon-detail" id="txt_fob_id">ID</span>
                             <input type="text" class="form-control" placeholder="ID" aria-describedby="txt_fob_id" readonly v-model="currentRow.fob_id">
                         </div>
@@ -119,7 +119,7 @@
 import funnyobjects from '../funnyobjects'
 import gridHelper from '../gridHelper'
 import {newItem, editItem, deleteItem} from '../actions'
-import {dialogTitle, currentRow} from '../getters'
+import {actionName, dialogTitle, currentRow} from '../getters'
 
 const sender = 'ObjectManager';
 const modelName = 'funnyobject';
@@ -177,6 +177,7 @@ export default {
             deleteItem
         },
         getters: {
+            actionName,
             dialogTitle,
             currentRow
         }
