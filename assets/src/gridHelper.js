@@ -1,11 +1,11 @@
+import funnyobjects from './funnyobjects'
+
 let gridHelper = {
     config: {
         ajaxSettings: {
             method: 'GET',
             cache: false,
-            headers: {
-                'X-CI-APIKEY': 'HelloWorld123!'
-            }
+            headers: funnyobjects.headers
         },
         labels: {
             all: 'Tutti',
@@ -67,6 +67,17 @@ let gridHelper = {
             queryData = gridHelper.queryData.setSearchPhraseFilter(queryData, req, searchFieldName);
             queryData = gridHelper.queryData.setSort(queryData, req);
             return path + gridHelper.queryData.encode(queryData);
+        }
+    },
+    detail: {
+        open: (detailName) => {
+            $('#' + detailName).modal('show');
+        },
+        openDetail: () => {
+            gridHelper.detail.open('detail');
+        },
+        openConfirmDelete: () => {
+            gridHelper.detail.open('confirmDelete');
         }
     }
 };
