@@ -29,11 +29,11 @@
         <table id="main-grid" class="table table-condensed table-hover table-striped" data-ajax="true" data-toggle="bootgrid">
             <thead>
                 <tr>
-                    <th data-column-id="fob_id" data-type="numeric" data-identifier="true">ID</th>
-                    <th data-column-id="fob_des">Descrizione</th>
-                    <th data-column-id="fob_created" data-formatter="fob_created_formatter" data-order="desc">Creato il</th>
-                    <th data-column-id="fob_disabled" data-formatter="fob_disabled_formatter">Disabilitato</th>
-                    <th data-column-id="actions" data-formatter="actions_formatter" data-sortable="false">Azioni</th>
+                    <th data-column-id="fob_id" data-type="numeric" data-width="10%" data-identifier="true">ID</th>
+                    <th data-column-id="fob_des" data-width="40%">Descrizione</th>
+                    <th data-column-id="fob_created" data-formatter="fob_created_formatter" data-order="desc" data-width="25%">Creato il</th>
+                    <th data-column-id="fob_disabled" data-formatter="fob_disabled_formatter" data-width="10%">Dis.</th>
+                    <th data-column-id="actions" data-formatter="actions_formatter" data-sortable="false" data-width="15%">Azioni</th>
                 </tr>
             </thead>
         </table>
@@ -55,23 +55,23 @@
                         <!-- Dati principali -->
 
                         <div class="input-group" v-if="actionName === 'edit'">
-                            <span class="input-group-addon input-group-addon-detail" id="txt_fob_id">ID</span>
-                            <input type="text" class="form-control" placeholder="ID" aria-describedby="txt_fob_id" readonly v-model="currentRow.fob_id">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_id">ID</span>
+                            <input type="text" class="form-control" placeholder="ID" id="txt_fob_id" aria-describedby="lbl_fob_id" readonly v-model="currentRow.fob_id">
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="txt_fob_des">Descrizione</span>
-                            <input type="text" class="form-control" placeholder="Descrizione" aria-describedby="txt_fob_des" v-model="currentRow.fob_des">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_des">Descrizione</span>
+                            <input type="text" class="form-control" placeholder="Descrizione" id="txt_fob_des" aria-describedby="lbl_fob_des" v-model="currentRow.fob_des">
+                        </div>
+
+                        <div class="input-group" v-if="actionName === 'edit'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_created">Creato il</span>
+                            <input type="text" class="form-control" placeholder="Creato il" id="txt_fob_created" aria-describedby="txt_fob_created" readonly v-model="currentRow.fob_created | localDateTime">
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="txt_fob_created">Creato il</span>
-                            <input type="text" class="form-control" placeholder="Creato il" aria-describedby="txt_fob_created" v-model="currentRow.fob_created">
-                        </div>
-
-                        <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="txt_fob_disabled">Disabilitato</span>
-                            <input type="text" class="form-control" placeholder="Disabilitato" aria-describedby="txt_fob_disabled" v-model="currentRow.fob_disabled">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_disabled">Disabilitato</span>
+                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fob_disabled" aria-describedby="lbl_fob_disabled" v-model="fobDisabled">
                         </div>
 
                     </div>
@@ -79,7 +79,7 @@
                     <!-- Footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary">Conferma</button>
+                        <button type="button" class="btn btn-primary" id="confirmDetail">Conferma</button>
                     </div>
 
                 </div>
@@ -112,14 +112,65 @@
             </div>
         </div>
 
+        <!-- Notify Message -->
+        <div class="modal fade" id="notifyMessage" tabindex="-1" role="dialog" aria-labelledby="notifyLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="notifyLabel">{{dialogTitle}}</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <span>{{notifyMessage}}</span>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="modal fade" id="errorMessage" tabindex="-1" role="dialog" aria-labelledby="errorLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="errorLabel">{{dialogTitle}}</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <span>{{errorMessage}}</span>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>    
-import funnyobjects from '../funnyobjects'
+import backEnd from '../backEnd'
 import gridHelper from '../gridHelper'
-import {newItem, editItem, deleteItem} from '../actions'
-import {actionName, dialogTitle, currentRow} from '../getters'
+import filters from '../filters'
+import {newItem, editItem, deleteItem, confirmDetail} from '../actions'
+import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
 
 const sender = 'ObjectManager';
 const modelName = 'funnyobject';
@@ -127,7 +178,7 @@ const modelName = 'funnyobject';
 export default {
     ready() {
         this.initGrid(this);
-        this.initToolbar(this);
+        this.initComponents(this);
     },
     methods: {
         initGrid: (context) => {
@@ -139,7 +190,7 @@ export default {
                     return {};
                 },
                 url: () => {
-                    return gridHelper.search.getDefaultSearchUrl(funnyobjects.baseUrl + funnyobjects.path + '/', originalRequest, 'fob_des');
+                    return gridHelper.search.getDefaultSearchUrl(backEnd.baseUrl + '/funnyobject/', originalRequest, 'fob_des');
                 },
                 labels: gridHelper.config.labels,
                 formatters: {
@@ -164,22 +215,40 @@ export default {
                 });
             });
         },
-        initToolbar: (context) => {
+        initComponents: (context) => {
             $('#newItem').on('click', () => {
                 context.newItem(sender, modelName);
             });
+
+            $('#detail').on('shown.bs.modal', function() {
+                $('#txt_fob_des').focus();
+            });
+
+            $('#confirmDetail').on('click', () => {
+                let detailData = {
+                    'fob_des': $('#txt_fob_des').val(),
+                    'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
+                };
+                context.confirmDetail(sender, modelName, detailData, context.rowId);
+            });         
         }
     },
     vuex: {
         actions: {
             newItem,
             editItem,
-            deleteItem
+            deleteItem,
+            confirmDetail
         },
         getters: {
             actionName,
+            rowId,
             dialogTitle,
-            currentRow
+            currentRow,
+            notifyMessage
+        },
+        computed: {
+            fobDisabled: () => this.currentRow.fob_disabled == 1
         }
     }
 }

@@ -1,11 +1,12 @@
-import funnyobjects from './funnyobjects'
+import backEnd from './backEnd'
+import dateUtils from './dateUtils'
 
 let gridHelper = {
     config: {
         ajaxSettings: {
             method: 'GET',
             cache: false,
-            headers: funnyobjects.headers
+            headers: backEnd.headers
         },
         labels: {
             all: 'Tutti',
@@ -17,12 +18,9 @@ let gridHelper = {
         }
     },
     formatters: {
-        formatDate: (toFormat) => {
-            let dateFormat = require('dateformat');
-            return dateFormat(new Date(toFormat), "dd-mm-yyyy h:MM:ss");
-        },
+        formatDate: (toFormat) => dateUtils.formatDate(toFormat),
         formatCheckbox: (value) => {
-            return '<input type="checkbox" disabled' + (value === 0 ? ' checked' : '') + '>';
+            return '<input type="checkbox" disabled' + (value === '1' ? ' checked' : '') + '>';
         },
         formatActions: (rowId) => {
             return "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-pencil\"></span></button> " + 
@@ -78,6 +76,32 @@ let gridHelper = {
         },
         openConfirmDelete: () => {
             gridHelper.detail.open('confirmDelete');
+        },
+        openNotifyMessage: () => {
+            gridHelper.detail.open('notifyMessage');
+        },
+        openErrorMessage: () => {
+            gridHelper.detail.open('errorMessage');
+        },
+        close: (detailName) => {
+            $('#' + detailName).modal('hide');
+        },
+        closeDetail: () => {
+            gridHelper.detail.close('detail');
+        },
+        closeConfirmDelete: () => {
+            gridHelper.detail.close('confirmDelete');
+        },
+        closeNotifyMessage: () => {
+            gridHelper.detail.close('notifyMessage');
+        },
+        closeErrorMessage: () => {
+            gridHelper.detail.close('errorMessage');
+        },
+    },
+    actions: {
+        reload: (gridName = 'main-grid') => {
+            $("#main-grid").bootgrid('reload');
         }
     }
 };
