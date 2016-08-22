@@ -4,6 +4,9 @@ let modelHelper = {
         dialogTitle += ' ' + modelHelper.modelNameToDescription(modelName);
         return dialogTitle;
     },
+    getConfirmDeleteDialogTitle: (modelName) => {
+        return 'Cancellazione ' + modelHelper.modelNameToDescription(modelName);
+    },
     getNotifyMessage: (modelName, action, data) => {
         let msg = "Operazione effettuata con successo - "
         msg += modelHelper.modelNameToDescription(modelName) + ': ' + data.fob_des;

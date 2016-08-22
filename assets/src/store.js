@@ -54,6 +54,14 @@ export const mutations = {
         gridHelper.detail.openNotifyMessage();
         gridHelper.actions.reload();
     },
+    CONFIRM_DELETE(state, sender, modelName, rowId, data) {
+        Vue.set(state.data, 'currentRow', data);
+        Vue.set(state.labels, 'dialogTitle', modelHelper.getConfirmDeleteDialogTitle(modelName));
+        Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
+        gridHelper.detail.closeConfirmDelete();
+        gridHelper.detail.openNotifyMessage();
+        gridHelper.actions.reload();
+    },
     SERVER_ERROR(state, sender, modelName, req, err) {
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.messages, 'error', modelHelper.getErrorMessage(modelName, state.action.name, err));

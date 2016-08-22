@@ -28,6 +28,16 @@ export const confirmDetail = ({dispatch, state}, sender, modelName, detailData, 
     if (!rowId) {
         backEnd.insert(modelName, detailData, onSuccess, onError);
     } else {
-        // TODO
+        backEnd.update(modelName, rowId, detailData, onSuccess, onError);
     }
+}
+
+export const confirmDelete = ({dispatch, state}, sender, modelName, rowId) => {
+    let onSuccess = (data) => {
+        dispatch('CONFIRM_DELETE', sender, modelName, rowId, data);
+    };
+    let onError = (req, err) => {
+        dispatch('SERVER_ERROR', sender, modelName, req, err);
+    }
+    backEnd.del(modelName, rowId, onSuccess, onError);
 }

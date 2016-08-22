@@ -94,7 +94,7 @@
                     <!-- Header -->
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="confirmDeleteLabel">Cancella Oggetto</h4>
+                        <h4 class="modal-title" id="confirmDeleteLabel">Cancellazione Oggetto</h4>
                     </div>
 
                     <!-- Body -->
@@ -105,7 +105,7 @@
                     <!-- Footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary">Conferma</button>
+                        <button type="button" class="btn btn-primary" id="confirmDelete">Conferma</button>
                     </div>
 
                 </div>
@@ -169,7 +169,7 @@
 import backEnd from '../backEnd'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {newItem, editItem, deleteItem, confirmDetail} from '../actions'
+import {newItem, editItem, deleteItem, confirmDetail, confirmDelete} from '../actions'
 import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
 
 const sender = 'ObjectManager';
@@ -230,6 +230,10 @@ export default {
                     'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
                 };
                 context.confirmDetail(sender, modelName, detailData, context.rowId);
+            });      
+
+            $('#confirmDelete').on('click', () => {
+                context.confirmDelete(sender, modelName, context.rowId);
             });         
         }
     },
@@ -238,7 +242,8 @@ export default {
             newItem,
             editItem,
             deleteItem,
-            confirmDetail
+            confirmDetail,
+            confirmDelete
         },
         getters: {
             actionName,
