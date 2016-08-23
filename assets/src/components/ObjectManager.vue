@@ -177,11 +177,11 @@ const modelName = 'funnyobject';
 
 export default {
     ready() {
-        this.initGrid(this);
-        this.initComponents(this);
+        this.initGrid();
+        this.initComponents();
     },
     methods: {
-        initGrid: (context) => {
+        initGrid() {
             let originalRequest = {};
             let grid = $("#main-grid").bootgrid({
                 ajaxSettings: gridHelper.config.ajaxSettings,
@@ -208,16 +208,16 @@ export default {
             .on("loaded.rs.jquery.bootgrid", () => {
                 grid.find(".command-edit").on("click", (e) => {
                     let rowId = grid.find(".command-edit").data("row-id");
-                    context.editItem(sender, modelName, rowId);
+                    this.editItem(sender, modelName, rowId);
                 }).end().find(".command-delete").on("click", (e) => {
                     let rowId = grid.find(".command-edit").data("row-id");
-                    context.deleteItem(sender, modelName, rowId);
+                    this.deleteItem(sender, modelName, rowId);
                 });
             });
         },
-        initComponents: (context) => {
+        initComponents() {
             $('#newItem').on('click', () => {
-                context.newItem(sender, modelName);
+                this.newItem(sender, modelName);
             });
 
             $('#detail').on('shown.bs.modal', function() {
@@ -229,11 +229,11 @@ export default {
                     'fob_des': $('#txt_fob_des').val(),
                     'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
                 };
-                context.confirmDetail(sender, modelName, detailData, context.rowId);
+                this.confirmDetail(sender, modelName, detailData, this.rowId);
             });      
 
             $('#confirmDelete').on('click', () => {
-                context.confirmDelete(sender, modelName, context.rowId);
+                this.confirmDelete(sender, modelName, this.rowId);
             });         
         }
     },
