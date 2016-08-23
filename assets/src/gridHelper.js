@@ -10,7 +10,7 @@ let gridHelper = {
         },
         labels: {
             all: 'Tutti',
-            infos: 'Visualizzazione {{ctx.start}} di {{ctx.end}} (totale elementi: {{ctx.total}})',
+            infos: 'Visualizzazione da {{ctx.start}} a {{ctx.end}} (totale elementi: {{ctx.total}})',
             loading: 'Caricamento',
             noResults: 'Nessun risultato',
             refresh: 'Ricarica',
@@ -31,7 +31,7 @@ let gridHelper = {
         init: (req) => {
             return {
                 limit: req.rowCount,
-                offset: parseInt(req.current / req.rowCount) || 0,
+                offset: req.rowCount * (req.current > 0 ? req.current - 1 : 0),  
                 filters: [],
                 sort: []
             };
