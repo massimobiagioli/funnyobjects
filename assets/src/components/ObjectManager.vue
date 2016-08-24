@@ -166,17 +166,19 @@
 </template>
 
 <script>    
-import backEnd from '../backEnd'
+import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
 import {newItem, editItem, deleteItem, confirmDetail, confirmDelete} from '../actions'
 import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
 
-const sender = 'ObjectManager';
-const modelName = 'funnyobject';
-
 export default {
     ready() {
+        this.sender = 'ObjectManager';
+        this.modelName = 'funnyobject';
+        this.defaultSearchFieldName = 'fob_des';
+        this.backEnd = backEndFactory.create();
+
         this.initGrid();
         this.initComponents();
     },
@@ -184,40 +186,40 @@ export default {
         initGrid() {
             let originalRequest = {};
             let grid = $("#main-grid").bootgrid({
-                ajaxSettings: gridHelper.config.ajaxSettings,
+                ajaxSettings: gridHelper.getAjaxSettings(),
                 requestHandler: (request) => {
                     originalRequest = request;
                     return {};
                 },
                 url: () => {
-                    return gridHelper.search.getDefaultSearchUrl(backEnd.baseUrl + '/funnyobject/', originalRequest, 'fob_des');
+                    return this.backEnd.getUrlForQuery(this.modelName, originalRequest, this.defaultSearchFieldName);
                 },
-                labels: gridHelper.config.labels,
+                labels: gridHelper.getLabels(),
                 formatters: {
                     'fob_created_formatter': (column, row) => {
-                        return gridHelper.formatters.formatDate(row.fob_created);
+                        return gridHelper.formatDate(row.fob_created);
                     },
                     'fob_disabled_formatter': (column, row) => {
-                        return gridHelper.formatters.formatCheckbox(row.fob_disabled);
+                        return gridHelper.formatCheckbox(row.fob_disabled);
                     },
                     'actions_formatter': (column, row) => {
-                        return gridHelper.formatters.formatActions(row.fob_id);
+                        return gridHelper.formatActions(row.fob_id);
                     }
                 }
             })
             .on("loaded.rs.jquery.bootgrid", () => {
                 grid.find(".command-edit").on("click", (e) => {
                     let rowId = grid.find(".command-edit").data("row-id");
-                    this.editItem(sender, modelName, rowId);
+                    this.editItem(this.sender, this.modelName, rowId);
                 }).end().find(".command-delete").on("click", (e) => {
                     let rowId = grid.find(".command-edit").data("row-id");
-                    this.deleteItem(sender, modelName, rowId);
+                    this.deleteItem(this.sender, this.modelName, rowId);
                 });
             });
         },
         initComponents() {
             $('#newItem').on('click', () => {
-                this.newItem(sender, modelName);
+                this.newItem(this.sender, this.modelName);
             });
 
             $('#detail').on('shown.bs.modal', function() {
@@ -229,11 +231,11 @@ export default {
                     'fob_des': $('#txt_fob_des').val(),
                     'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
                 };
-                this.confirmDetail(sender, modelName, detailData, this.rowId);
+                this.confirmDetail(this.sender, this.modelName, detailData, this.rowId);
             });      
 
             $('#confirmDelete').on('click', () => {
-                this.confirmDelete(sender, modelName, this.rowId);
+                this.confirmDelete(this.sender, this.modelName, this.rowId);
             });         
         }
     },

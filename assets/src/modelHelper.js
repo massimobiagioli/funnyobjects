@@ -1,21 +1,32 @@
-let modelHelper = {
-    getDetailDialogTitle: (modelName, action) => {
+// Model Helper
+export default class {
+
+    // Imposta titolo per dialog dettaglio
+    static getDetailDialogTitle(modelName, action) {
         let dialogTitle = (action === 'new' ? 'Nuovo' : 'Modifica');
-        dialogTitle += ' ' + modelHelper.modelNameToDescription(modelName);
+        dialogTitle += ' ' + this.modelNameToDescription(modelName);
         return dialogTitle;
-    },
-    getConfirmDeleteDialogTitle: (modelName) => {
-        return 'Cancellazione ' + modelHelper.modelNameToDescription(modelName);
-    },
-    getNotifyMessage: (modelName, action, data) => {
+    }
+
+    // Imposta titolo per dialog conferma cancellazione
+    static getConfirmDeleteDialogTitle(modelName) {
+        return 'Cancellazione ' + this.modelNameToDescription(modelName);
+    }
+
+    // Imposta messaggio dialog di notifica
+    static getNotifyMessage(modelName, action, data) {
         let msg = "Operazione effettuata con successo - "
-        msg += modelHelper.modelNameToDescription(modelName) + ': ' + data.fob_des;
+        msg += this.modelNameToDescription(modelName) + ': ' + data.fob_des;
         return msg;
-    },
-    getErrorMessage: (modelName, action, err) => {
+    }
+
+    // Imposta messaggio dialog di errore
+    static getErrorMessage(modelName, action, err) {
         return "ERRORE: " + err;
-    },
-    modelNameToDescription: (modelName) => {
+    }
+
+    // Ricava descrizione da nome model
+    static modelNameToDescription(modelName) {
         let desc = '';
         switch (modelName) {
             case 'funnyobject':
@@ -27,6 +38,5 @@ let modelHelper = {
         }
         return desc;
     }
-};
 
-export default modelHelper
+}

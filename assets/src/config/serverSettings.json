@@ -1,0 +1,6 @@
+{
+    "baseUrl": "/funnyobjs/index.php/api",
+    "headers": { 
+        "X-CI-APIKEY": "HelloWorld123!"
+    }
+}

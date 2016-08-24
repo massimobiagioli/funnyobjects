@@ -1,15 +1,21 @@
-import backEnd from './backEnd'
+import backEndFactory from './backEndFactory'
 
+// Crea oggetto per gestione backEnd
+let backEnd = backEndFactory.create();
+
+// Preparazione aggiunta di un nuovo elemento
 export const newItem = ({dispatch, state}, sender, modelName) => {
     dispatch('NEW_ITEM', sender, modelName);
 }
 
+// Preparazione modifica di un elemento esistente
 export const editItem = ({dispatch, state}, sender, modelName, rowId) => {
     backEnd.load(modelName, rowId, (data) => {
         dispatch('EDIT_ITEM', sender, modelName, rowId, data);
     });
 }
 
+// Preparazione cancellazione di un elemento
 export const deleteItem = ({dispatch, state}, sender, modelName, rowId) => {
     backEnd.load(modelName, rowId, (data) => {
         dispatch('DELETE_ITEM', sender, modelName, rowId, data);
@@ -18,6 +24,7 @@ export const deleteItem = ({dispatch, state}, sender, modelName, rowId) => {
     });
 }
 
+// Conferma inserimento/modifica elemento
 export const confirmDetail = ({dispatch, state}, sender, modelName, detailData, rowId) => {
     let onSuccess = (data) => {
         dispatch('CONFIRM_DETAIL', sender, modelName, detailData, rowId, data);
@@ -32,6 +39,7 @@ export const confirmDetail = ({dispatch, state}, sender, modelName, detailData, 
     }
 }
 
+// Conferma cancellazione elemento
 export const confirmDelete = ({dispatch, state}, sender, modelName, rowId) => {
     let onSuccess = (data) => {
         dispatch('CONFIRM_DELETE', sender, modelName, rowId, data);
