@@ -3,6 +3,11 @@ import backEndFactory from './backEndFactory'
 // Crea oggetto per gestione backEnd
 let backEnd = backEndFactory.create();
 
+// Reset State
+export const resetState = ({dispatch, state}) => {
+    dispatch('RESET_STATE');
+}
+
 // Preparazione aggiunta di un nuovo elemento
 export const newItem = ({dispatch, state}, sender, modelName) => {
     dispatch('NEW_ITEM', sender, modelName);

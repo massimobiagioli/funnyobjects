@@ -15,8 +15,14 @@ export default class {
 
     // Imposta messaggio dialog di notifica
     static getNotifyMessage(modelName, action, data) {
-        let msg = "Operazione effettuata con successo - "
-        msg += this.modelNameToDescription(modelName) + ': ' + data.fob_des;
+        let msg = 'Operazione effettuata con successo';
+        switch (modelName) {
+            case 'funnyobject':
+                msg += ' - ' + this.modelNameToDescription(modelName) + ': ' + data.fob_des;
+                break;
+            default:
+                break;
+        }
         return msg;
     }
 
@@ -31,6 +37,9 @@ export default class {
         switch (modelName) {
             case 'funnyobject':
                 desc = ' Oggetto';
+                break;
+            case 'settings':
+                desc = ' Impostazioni'
                 break;
             default:
                 desc = ' Elemento'

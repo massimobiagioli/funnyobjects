@@ -4,6 +4,7 @@ import store from './store'
 import MainLayout from './components/MainLayout.vue'
 import ControlPanel from './components/ControlPanel.vue'
 import ObjectManager from './components/ObjectManager.vue'
+import Settings from './components/Settings.vue'
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,9 @@ router.map({
             },
             '/objects': {
                 component: ObjectManager
+            },
+            '/settings': {
+                component: Settings
             }
         }
     }

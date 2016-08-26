@@ -14,6 +14,7 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li v-link="{path: '/objects', activeClass: 'active'}"><a v-link="{path: '/objects'}">Oggetti</a></li>
+          <li v-link="{path: '/settings', activeClass: 'active'}"><a v-link="{path: '/settings'}">Impostazioni</a></li>
         </ul>
       </div>
       <!--/.nav-collapse -->

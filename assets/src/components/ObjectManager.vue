@@ -169,10 +169,13 @@
 import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {newItem, editItem, deleteItem, confirmDetail, confirmDelete} from '../actions'
+import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete} from '../actions'
 import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
 
 export default {
+    created() {
+        this.resetState();
+    },
     ready() {
         this.sender = 'ObjectManager';
         this.modelName = 'funnyobject';
@@ -241,6 +244,7 @@ export default {
     },
     vuex: {
         actions: {
+            resetState,
             newItem,
             editItem,
             deleteItem,

@@ -18,6 +18,14 @@ const state = {
 
 export const mutations = {
     
+    // Reset State
+    RESET_STATE(state) {
+        Vue.set(state, 'action', {});
+        Vue.set(state, 'labels', {});
+        Vue.set(state, 'messages', {});
+        Vue.set(state.data, 'currentRow', {});
+    }, 
+
     // Preparazione aggiunta di un nuovo elemento
     NEW_ITEM(state, sender, modelName, rowId) {
         Vue.set(state, 'action', {  
