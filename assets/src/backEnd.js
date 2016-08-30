@@ -16,6 +16,14 @@ export default class {
         return this.baseUrl + '/' + modelName + '/' + queryDataHandler.encode(queryData);
     }
 
+    // Restituisce url da utilizzare nella grid per il caricamento di sottoelementi
+    getUrlForQuerySubItem(modelName, parentId, req, searchFieldName) {
+        let queryData = queryDataHandler.init(req);
+        queryData = queryDataHandler.setSubItemFilter(queryData, parentId, searchFieldName);
+        queryData = queryDataHandler.setSort(queryData, req);
+        return this.baseUrl + '/' + modelName + '/' + queryDataHandler.encode(queryData);
+    }
+
     // Carica elemento in funzione dell'identificativo row
     load(modelName, rowId, onSuccess, onError) {
         $.ajax({

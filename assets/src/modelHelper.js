@@ -3,8 +3,19 @@ export default class {
 
     // Imposta titolo per dialog dettaglio
     static getDetailDialogTitle(modelName, action) {
-        let dialogTitle = (action === 'new' ? 'Nuovo' : 'Modifica');
-        dialogTitle += ' ' + this.modelNameToDescription(modelName);
+        let dialogTitle = '';
+        switch (action) {
+            case 'new':
+                dialogTitle = 'Nuovo';
+                dialogTitle += ' ' + this.modelNameToDescription(modelName);
+                break;
+            case 'edit':
+                dialogTitle = 'Modifica';
+                dialogTitle += ' ' + this.modelNameToDescription(modelName);
+                break;
+            default:
+                break;
+        }
         return dialogTitle;
     }
 
@@ -30,6 +41,19 @@ export default class {
     static getErrorMessage(modelName, action, err) {
         return "ERRORE: " + err;
     }
+
+    // Restituisce nome dialog sottoelementi in funzione del model
+    static getSubItemsDialogName(modelName) {
+        let dialogName = '';
+        switch (modelName) {
+            case 'funnyobject':
+                dialogName = 'commands';
+                break;
+            default:
+                break;
+        }
+        return dialogName;
+    } 
 
     // Ricava descrizione da nome model
     static modelNameToDescription(modelName) {

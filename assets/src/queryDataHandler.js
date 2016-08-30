@@ -23,6 +23,16 @@ export default class {
         return qd;
     }
 
+    // Imposta filtro per ricerca elementi figli
+    static setSubItemFilter(qd, parentId, name) {
+        qd.filters.push({
+            name: name,
+            operator: '=',
+            value: parentId
+        });
+        return qd;
+    }
+
     // Imposta ordinamento
     static setSort(qd, req) {
         if (req.sort) {

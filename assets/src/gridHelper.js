@@ -15,9 +15,11 @@ export default class {
     }
 
     // Formatter colonna actions
-    static formatActions(rowId) {
-        return "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-pencil\"></span></button> " + 
+    static formatActions(rowId, additionalActions = '') {
+        let actions = "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-pencil\"></span></button> " + 
                 "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-trash-o\"></span></button>";
+        actions += ' ' + additionalActions;
+        return actions;         
     }
 
     // Ricarica grid

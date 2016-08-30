@@ -54,3 +54,10 @@ export const confirmDelete = ({dispatch, state}, sender, modelName, rowId) => {
     }
     backEnd.del(modelName, rowId, onSuccess, onError);
 }
+
+// Gestione sottoelementi
+export const editSubItems = ({dispatch, state}, sender, modelName, rowId) => {
+    backEnd.load(modelName, rowId, (data) => {
+        dispatch('EDIT_SUBITEMS', sender, modelName, rowId, data);
+    });
+}

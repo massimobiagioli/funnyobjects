@@ -12,7 +12,7 @@ const state = {
     labels: {},
     messages: {},
     data: {
-        currentRow: {}
+        currentRow: {},
     }
 };
 
@@ -88,6 +88,18 @@ export const mutations = {
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.messages, 'error', modelHelper.getErrorMessage(modelName, state.action.name, err));
         dialogHelper.openErrorMessage();
+    },
+
+    // Gestione sottoelementi
+    EDIT_SUBITEMS(state, sender, modelName, rowId, data) {
+        Vue.set(state, 'action', {  
+            name: 'edit-subitems',
+            sender,
+            modelName,
+            rowId
+        });
+        Vue.set(state.data, 'currentRow', data);
+        dialogHelper.open(modelHelper.getSubItemsDialogName(modelName));
     },
 }
 

@@ -112,6 +112,49 @@
             </div>
         </div>
 
+        <!-- Commands -->
+        <div class="modal fade" id="commands" tabindex="-1" role="dialog" aria-labelledby="commandsLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="confirmDeleteLabel">Comandi di {{currentRow.fob_des}}</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        
+                        <!-- New -->
+                        <div class="toolbar">
+                            <button type="button" id="newSubItem" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span><span> Nuovo</span></button>
+                        </div>
+
+                        <!-- Grid -->
+                        <table id="cmd-grid" class="table table-condensed table-hover table-striped" data-ajax="true" data-toggle="bootgrid">
+                            <thead>
+                                <tr>
+                                    <th data-column-id="fio_id" data-type="numeric" data-width="10%" data-identifier="true">ID</th>
+                                    <th data-column-id="fio_des" data-order="asc" data-width="35%">Descrizione</th>
+                                    <th data-column-id="fio_direction" data-width="10%">I/O</th>
+                                    <th data-column-id="fio_command" data-formatter="fio_command" data-width="30%">Comando</th>
+                                    <th data-column-id="actions" data-formatter="actions_formatter_subitem" data-sortable="false" data-width="15%">Azioni</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <!-- Notify Message -->
         <dialog-notify-message :dialog-title="dialogTitle" :notify-message="notifyMessage"></dialog-notify-message>
 
@@ -125,7 +168,7 @@
 import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete} from '../actions'
+import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems} from '../actions'
 import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
 import DialogNotifyMessage from './DialogNotifyMessage.vue'
 import DialogErrorMessage from './DialogErrorMessage.vue'
@@ -164,7 +207,14 @@ export default {
                         return gridHelper.formatCheckbox(row.fob_disabled);
                     },
                     'actions_formatter': (column, row) => {
+                        let additionalActions = "<button type=\"button\" class=\"btn btn-xs btn-default command-io\" data-row-id=\"" + row.fob_id + "\"><span class=\"fa fa-play\"></span></button>";
+                        return gridHelper.formatActions(row.fob_id, additionalActions);
+                    },
+                    'actions_formatter_subitem': (column, row) => {
                         return gridHelper.formatActions(row.fob_id);
+                    },
+                    'fio_command': (column, row) => {
+                        return 'xxxx';
                     }
                 }
             })
@@ -175,18 +225,28 @@ export default {
                 }).end().find(".command-delete").on("click", (e) => {
                     let rowId = grid.find(".command-edit").data("row-id");
                     this.deleteItem(this.sender, this.modelName, rowId);
+                }).end().find(".command-io").on("click", (e) => {
+                    let rowId = grid.find(".command-io").data("row-id");
+                    this.editSubItems(this.sender, this.modelName, rowId);
                 });
             });
         },
+        initGridCommands() {
+            // TODO: gestire grid commands
+        },
         initComponents() {
+            
+            // Pulsante aggiunta nuovo elemento
             $('#newItem').on('click', () => {
                 this.newItem(this.sender, this.modelName);
             });
 
-            $('#detail').on('shown.bs.modal', function() {
+            // Apertura dialog dettaglio
+            $('#detail').on('shown.bs.modal', () => {
                 $('#txt_fob_des').focus();
             });
 
+            // Pulsante conferma dettaglio
             $('#confirmDetail').on('click', () => {
                 let detailData = {
                     'fob_des': $('#txt_fob_des').val(),
@@ -195,9 +255,15 @@ export default {
                 this.confirmDetail(this.sender, this.modelName, detailData, this.rowId);
             });      
 
+            // Pulsante conferma cancellazione
             $('#confirmDelete').on('click', () => {
                 this.confirmDelete(this.sender, this.modelName, this.rowId);
-            });         
+            });
+
+            // Apertura dialog comandi
+            $('#commands').on('shown.bs.modal', () => {
+                this.initGridCommands();s
+            });
         }
     },
     components: {
@@ -211,7 +277,8 @@ export default {
             editItem,
             deleteItem,
             confirmDetail,
-            confirmDelete
+            confirmDelete,
+            editSubItems
         },
         getters: {
             actionName,
