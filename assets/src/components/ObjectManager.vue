@@ -10,6 +10,10 @@
         min-width: 200px;
         text-align: right;
     }
+    .modal-dialog {
+        width: 80%; 
+        margin-left: 10%; 
+    }
 </style>
 
 <template>
@@ -132,14 +136,15 @@
                         </div>
 
                         <!-- Grid -->
-                        <table id="cmd-grid" class="table table-condensed table-hover table-striped" data-ajax="true" data-toggle="bootgrid">
+                        <table id="commands-grid" class="table table-condensed table-hover table-striped" data-ajax="true" data-toggle="bootgrid">
                             <thead>
                                 <tr>
                                     <th data-column-id="fio_id" data-type="numeric" data-width="10%" data-identifier="true">ID</th>
-                                    <th data-column-id="fio_des" data-order="asc" data-width="35%">Descrizione</th>
+                                    <th data-column-id="fio_des" data-order="asc" data-width="30%">Descrizione</th>
                                     <th data-column-id="fio_direction" data-width="10%">I/O</th>
-                                    <th data-column-id="fio_command" data-formatter="fio_command" data-width="30%">Comando</th>
-                                    <th data-column-id="actions" data-formatter="actions_formatter_subitem" data-sortable="false" data-width="15%">Azioni</th>
+                                    <th data-column-id="fio_command" data-formatter="fio_command_formatter" data-width="25%">Comando</th>
+                                    <th data-column-id="fio_disabled" data-formatter="fio_disabled_formatter" data-width="10%">Dis.</th>
+                                    <th data-column-id="actions" data-formatter="fio_actions_subitems_formatter" data-sortable="false" data-width="15%">Azioni</th>
                                 </tr>
                             </thead>
                         </table>
@@ -180,7 +185,10 @@ export default {
     ready() {
         this.sender = 'ObjectManager';
         this.modelName = 'funnyobject';
+        this.modelNameSubItem = 'funnyobjectio';
         this.defaultSearchFieldName = 'fob_des';
+        this.parendFieldNameSubItem = 'fio_id';
+        this.defaultSearchFieldNameSubItem = 'fio_des';
         this.backEnd = backEndFactory.create();
 
         this.initGrid();
@@ -209,30 +217,65 @@ export default {
                     'actions_formatter': (column, row) => {
                         let additionalActions = "<button type=\"button\" class=\"btn btn-xs btn-default command-io\" data-row-id=\"" + row.fob_id + "\"><span class=\"fa fa-play\"></span></button>";
                         return gridHelper.formatActions(row.fob_id, additionalActions);
-                    },
-                    'actions_formatter_subitem': (column, row) => {
-                        return gridHelper.formatActions(row.fob_id);
-                    },
-                    'fio_command': (column, row) => {
-                        return 'xxxx';
                     }
                 }
             })
             .on("loaded.rs.jquery.bootgrid", () => {
                 grid.find(".command-edit").on("click", (e) => {
-                    let rowId = grid.find(".command-edit").data("row-id");
+                    let rowId = $(e.currentTarget).data("row-id");
                     this.editItem(this.sender, this.modelName, rowId);
                 }).end().find(".command-delete").on("click", (e) => {
-                    let rowId = grid.find(".command-edit").data("row-id");
+                    let rowId = $(e.currentTarget).data("row-id");
                     this.deleteItem(this.sender, this.modelName, rowId);
                 }).end().find(".command-io").on("click", (e) => {
-                    let rowId = grid.find(".command-io").data("row-id");
+                    let rowId = $(e.currentTarget).data("row-id");
                     this.editSubItems(this.sender, this.modelName, rowId);
                 });
             });
         },
         initGridCommands() {
-            // TODO: gestire grid commands
+            let originalRequest = {};
+            let grid = $("#commands-grid").bootgrid({
+                ajaxSettings: gridHelper.getAjaxSettings(),
+                requestHandler: (request) => {
+                    originalRequest = request;
+                    return {};
+                },
+                url: () => {
+                    return this.backEnd.getUrlForQuerySubItem(this.modelNameSubItem, this.rowId, originalRequest, this.parendFieldNameSubItem, this.defaultSearchFieldNameSubItem);
+                },
+                labels: gridHelper.getLabels(),
+                formatters: {
+                    'fio_disabled_formatter': (column, row) => {
+                        return gridHelper.formatCheckbox(row.fio_disabled);
+                    },
+                    'fio_command_formatter': (column, row) => {
+                        let html = '';
+                        if (row.fio_direction === 'out') {
+                            html += '<div><span>type: </span><span>' + row.fio_send_type + '</span></div>';
+                            html += '<div><span>cmd: </span><span>' + row.fio_send_cmd + '</span></div>';
+                            if (row.fio_send_type === 'val') {
+                                html += '<div><span>range: </span><span>' + row.fio_send_vmin + '</span><span> - </span><span>' + row.fio_send_vmax + '</span></div>';
+                            } 
+                        } else {   
+                            html += '<span>polling freq. (ms): </span><span>' + row.fio_recv_freq_polling + '</span>';    
+                        }
+                        return html;
+                    },
+                    'fio_actions_subitems_formatter': (column, row) => {
+                        return gridHelper.formatActions(row.fio_id, '', '-subitem');
+                    }
+                }
+            })
+            .on("loaded.rs.jquery.bootgrid", () => {
+                grid.find(".command-edit-subitem").on("click", (e) => {
+                    let rowId = $(e.currentTarget).data("row-id");
+                    this.editItem(this.sender, this.modelName, rowId);
+                }).end().find(".command-delete-subitem").on("click", (e) => {
+                    let rowId = $(e.currentTarget).data("row-id");
+                    this.deleteItem(this.sender, this.modelName, rowId);
+                });
+            });
         },
         initComponents() {
             
@@ -262,7 +305,12 @@ export default {
 
             // Apertura dialog comandi
             $('#commands').on('shown.bs.modal', () => {
-                this.initGridCommands();s
+                this.initGridCommands();
+            });
+
+            // Pulsante aggiunta nuovo sottoelemento
+            $('#newSubItem').on('click', () => {
+                this.newItem(this.sender, this.modelName);
             });
         }
     },

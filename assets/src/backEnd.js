@@ -17,9 +17,10 @@ export default class {
     }
 
     // Restituisce url da utilizzare nella grid per il caricamento di sottoelementi
-    getUrlForQuerySubItem(modelName, parentId, req, searchFieldName) {
+    getUrlForQuerySubItem(modelName, parentId, req, parendFieldNameSubItem, searchFieldName) {
         let queryData = queryDataHandler.init(req);
-        queryData = queryDataHandler.setSubItemFilter(queryData, parentId, searchFieldName);
+        queryData = queryDataHandler.setSubItemFilter(queryData, parentId, parendFieldNameSubItem);
+        queryData = queryDataHandler.setSearchPhraseFilter(queryData, req, searchFieldName);
         queryData = queryDataHandler.setSort(queryData, req);
         return this.baseUrl + '/' + modelName + '/' + queryDataHandler.encode(queryData);
     }

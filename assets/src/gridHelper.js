@@ -15,9 +15,9 @@ export default class {
     }
 
     // Formatter colonna actions
-    static formatActions(rowId, additionalActions = '') {
-        let actions = "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-pencil\"></span></button> " + 
-                "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-trash-o\"></span></button>";
+    static formatActions(rowId, additionalActions = '', classSuffix = '') {
+        let actions = "<button type=\"button\" class=\"btn btn-xs btn-default command-edit" + classSuffix + "\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-pencil\"></span></button> " + 
+                "<button type=\"button\" class=\"btn btn-xs btn-default command-delete" + classSuffix + "\" data-row-id=\"" + rowId + "\"><span class=\"fa fa-trash-o\"></span></button>";
         actions += ' ' + additionalActions;
         return actions;         
     }
