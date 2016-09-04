@@ -26,6 +26,11 @@ export default class {
         this.open('errorMessage');
     }
 
+    // Apre dialog gestione dettaglio sottoelemento
+    static openDetailSubItem() {
+        this.open('detailSubItem');
+    }
+
     // Chiude dialog gestione dettaglio
     static close(detailName) {
         $('#' + detailName).modal('hide');
@@ -49,6 +54,11 @@ export default class {
     // Chiude dialog per visualizzazione errore
     static closeErrorMessage() {
         this.close('errorMessage');
+    }
+
+    // Chiude dialog gestione dettaglio sottoelemento
+    static closeDetailSubItem() {
+        this.close('detailSubItem');
     }
 
 }

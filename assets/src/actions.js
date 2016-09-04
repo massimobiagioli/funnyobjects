@@ -61,3 +61,8 @@ export const editSubItems = ({dispatch, state}, sender, modelName, rowId) => {
         dispatch('EDIT_SUBITEMS', sender, modelName, rowId, data);
     });
 }
+
+// Preparazione aggiunta di un nuovo sottoelemento
+export const newSubItem = ({dispatch, state}, sender, modelName, parentId) => {
+    dispatch('NEW_SUBITEM', sender, modelName, parentId);
+}

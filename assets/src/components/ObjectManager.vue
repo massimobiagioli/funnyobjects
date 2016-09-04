@@ -157,6 +157,45 @@
                     </div>
 
                 </div>
+                
+            </div>
+        </div>
+
+        <!-- SubItem Detail -->
+        <div class="modal fade" id="detailSubItem" tabindex="-1" role="dialog" aria-labelledby="detailSubItemLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="detailSubItemLabel">{{dialogTitle}}</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        
+                        <!-- Dati principali -->
+
+                        <div class="input-group" v-if="actionName === 'edit'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_id">ID</span>
+                            <input type="text" class="form-control" placeholder="ID" id="txt_fio_id" aria-describedby="lbl_fio_id" readonly v-model="currentRowSubItem.fio_id">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_des">Descrizione</span>
+                            <input type="text" class="form-control" placeholder="Descrizione" id="txt_fio_des" aria-describedby="lbl_fio_des" v-model="currentRowSubItem.fio_des">
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-primary" id="confirmDetailSubItem">Conferma</button>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -173,8 +212,8 @@
 import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems} from '../actions'
-import {actionName, rowId, dialogTitle, currentRow, notifyMessage} from '../getters'
+import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems, newSubItem} from '../actions'
+import {actionName, rowId, dialogTitle, currentRow, currentRowSubItem, notifyMessage} from '../getters'
 import DialogNotifyMessage from './DialogNotifyMessage.vue'
 import DialogErrorMessage from './DialogErrorMessage.vue'
 
@@ -310,7 +349,7 @@ export default {
 
             // Pulsante aggiunta nuovo sottoelemento
             $('#newSubItem').on('click', () => {
-                this.newItem(this.sender, this.modelName);
+                this.newSubItem(this.sender, this.modelNameSubItem, this.rowId);
             });
         }
     },
@@ -326,13 +365,15 @@ export default {
             deleteItem,
             confirmDetail,
             confirmDelete,
-            editSubItems
+            editSubItems,
+            newSubItem
         },
         getters: {
             actionName,
             rowId,
             dialogTitle,
             currentRow,
+            currentRowSubItem,
             notifyMessage
         },
         computed: {

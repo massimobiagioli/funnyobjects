@@ -24,6 +24,7 @@ export const mutations = {
         Vue.set(state, 'labels', {});
         Vue.set(state, 'messages', {});
         Vue.set(state.data, 'currentRow', {});
+        Vue.set(state.data, 'currentRowSubItem', {});
     }, 
 
     // Preparazione aggiunta di un nuovo elemento
@@ -101,6 +102,20 @@ export const mutations = {
         Vue.set(state.data, 'currentRow', data);
         dialogHelper.open(modelHelper.getSubItemsDialogName(modelName));
     },
+
+    // Preparazione aggiunta di un nuovo sottoelemento
+    NEW_SUBITEM(state, sender, modelName, parentId) {
+        Vue.set(state, 'action', {  
+            name: 'new',
+            sender,
+            modelName,
+            parentId
+        });
+        Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
+        Vue.set(state.data, 'currentRow', {});
+        Vue.set(state.data, 'currentRowSubItem', {});
+        dialogHelper.openDetailSubItem();
+    }
 }
 
 export default new Vuex.Store({

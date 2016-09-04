@@ -65,6 +65,9 @@ export default class {
             case 'settings':
                 desc = ' Impostazioni'
                 break;
+            case 'funnyobjectio':
+                desc = ' Comando'
+                break;
             default:
                 desc = ' Elemento'
                 break;
