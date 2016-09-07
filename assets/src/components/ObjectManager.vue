@@ -183,8 +183,21 @@
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_des">Descrizione</span>
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_des">Descrizione</span>
                             <input type="text" class="form-control" placeholder="Descrizione" id="txt_fio_des" aria-describedby="lbl_fio_des" v-model="currentRowSubItem.fio_des">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_direction">Direzione</span>
+                            <select class="selectpicker form-control select-direction" style="width: 100px;">
+                                <option>Input</option>
+                                <option>Output</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_disabled">Disabilitato</span>
+                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fio_disabled" aria-describedby="lbl_fio_disabled" v-model="fioDisabled">
                         </div>
 
                     </div>
@@ -377,7 +390,9 @@ export default {
             notifyMessage
         },
         computed: {
-            fobDisabled: () => this.currentRow.fob_disabled == 1
+            fobDisabled: () => this.currentRow.fob_disabled == 1,
+            fioDisabled: () => this.currentRowSubItem.fio_disabled == 1,
+
         }
     }
 }
