@@ -55,9 +55,7 @@
 
                     <!-- Body -->
                     <div class="modal-body">
-                        
-                        <!-- Dati principali -->
-
+                                               
                         <div class="input-group" v-if="actionName === 'edit'">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fob_id">ID</span>
                             <input type="text" class="form-control" placeholder="ID" id="txt_fob_id" aria-describedby="lbl_fob_id" readonly v-model="currentRow.fob_id">
@@ -74,9 +72,9 @@
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_disabled">Disabilitato</span>
-                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fob_disabled" aria-describedby="lbl_fob_disabled" v-model="fobDisabled">
-                        </div>
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fob_disabled">Disabilitato</span>                             
+                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fob_disabled" aria-describedby="lbl_fob_disabled" v-model="currentRow.fob_disabled | checkbox">                           
+                        </div>                        
 
                     </div>
 
@@ -197,7 +195,7 @@
 
                         <div class="input-group">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fio_disabled">Disabilitato</span>
-                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fio_disabled" aria-describedby="lbl_fio_disabled" v-model="fioDisabled">
+                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fio_disabled" aria-describedby="lbl_fio_disabled" v-model="currentRowSubItem.fio_disabled | checkbox">
                         </div>
 
                     </div>
@@ -388,11 +386,6 @@ export default {
             currentRow,
             currentRowSubItem,
             notifyMessage
-        },
-        computed: {
-            fobDisabled: () => this.currentRow.fob_disabled == 1,
-            fioDisabled: () => this.currentRowSubItem.fio_disabled == 1,
-
         }
     }
 }
