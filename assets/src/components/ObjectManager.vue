@@ -173,8 +173,6 @@
                     <!-- Body -->
                     <div class="modal-body">
                         
-                        <!-- Dati principali -->
-
                         <div class="input-group" v-if="actionName === 'edit'">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fio_id">ID</span>
                             <input type="text" class="form-control" placeholder="ID" id="txt_fio_id" aria-describedby="lbl_fio_id" readonly v-model="currentRowSubItem.fio_id">
@@ -187,10 +185,38 @@
 
                         <div class="input-group">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fio_direction">Direzione</span>
-                            <select class="selectpicker form-control select-direction" style="width: 100px;">
-                                <option>Input</option>
-                                <option>Output</option>
+                            <select class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_direction">
+                                <option>in</option>
+                                <option>out</option>
                             </select>
+                        </div>
+
+                        <div class="input-group" v-if="currentRowSubItem.fio_direction === 'out'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_send_type">Tipo</span>
+                            <select class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_send_type">
+                                <option>cmd</option>
+                                <option>val</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group" v-if="currentRowSubItem.fio_direction === 'out'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_send_cmd">Comando</span>
+                            <input type="text" class="form-control" placeholder="Comando" id="txt_fio_send_cmd" aria-describedby="lbl_fio_send_cmd" v-model="currentRowSubItem.fio_send_cmd">
+                        </div>
+
+                        <div class="input-group" v-if="currentRowSubItem.fio_direction === 'out' && currentRowSubItem.fio_send_type === 'val'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_send_vmin">V. Min.</span>
+                            <input type="number" class="form-control" placeholder="V. Min." id="txt_fio_send_vmin" aria-describedby="lbl_fio_send_vmin" v-model="currentRowSubItem.fio_send_vmin">
+                        </div>
+
+                        <div class="input-group" v-if="currentRowSubItem.fio_direction === 'out' && currentRowSubItem.fio_send_type === 'val'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_send_vmax">V. Max.</span>
+                            <input type="number" class="form-control" placeholder="V. Max." id="txt_fio_send_vmax" aria-describedby="lbl_fio_send_vmax" v-model="currentRowSubItem.fio_send_vmax">
+                        </div>
+
+                        <div class="input-group" v-if="currentRowSubItem.fio_direction === 'in'">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_recv_freq_polling">Freq. Polling (ms)</span>
+                            <input type="number" class="form-control" placeholder="Freq. Polling (ms)" id="txt_fio_recv_freq_polling" aria-describedby="lbl_fio_recv_freq_polling" v-model="currentRowSubItem.fio_recv_freq_polling">
                         </div>
 
                         <div class="input-group">

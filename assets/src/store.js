@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import gridHelper from './gridHelper'
-import dialogHelper from './dialogHelper'
 import modelHelper from './modelHelper'
 
 Vue.use(Vuex);
@@ -36,7 +35,6 @@ export const mutations = {
         });
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.data, 'currentRow', {});
-        dialogHelper.openDetail();
     }, 
 
     // Preparazione modifica elemento esistente
@@ -49,7 +47,6 @@ export const mutations = {
         });
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.data, 'currentRow', data);
-        dialogHelper.openDetail();
     },
 
     // Preparazione cancellazione elemento esistente
@@ -61,7 +58,6 @@ export const mutations = {
             rowId
         });
         Vue.set(state.data, 'currentRow', data);
-        dialogHelper.openConfirmDelete();
     },
 
     // Conferma inserimento/modifica elemento
@@ -69,8 +65,6 @@ export const mutations = {
         Vue.set(state.data, 'currentRow', data);
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
-        dialogHelper.closeDetail();
-        dialogHelper.openNotifyMessage();
         gridHelper.reload();
     },
 
@@ -79,8 +73,6 @@ export const mutations = {
         Vue.set(state.data, 'currentRow', data);
         Vue.set(state.labels, 'dialogTitle', modelHelper.getConfirmDeleteDialogTitle(modelName));
         Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
-        dialogHelper.closeConfirmDelete();
-        dialogHelper.openNotifyMessage();
         gridHelper.reload();
     },
 
@@ -88,7 +80,6 @@ export const mutations = {
     SERVER_ERROR(state, sender, modelName, req, err) {
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.messages, 'error', modelHelper.getErrorMessage(modelName, state.action.name, err));
-        dialogHelper.openErrorMessage();
     },
 
     // Gestione sottoelementi
@@ -100,7 +91,6 @@ export const mutations = {
             rowId
         });
         Vue.set(state.data, 'currentRow', data);
-        dialogHelper.open(modelHelper.getSubItemsDialogName(modelName));
     },
 
     // Preparazione aggiunta di un nuovo sottoelemento
@@ -114,7 +104,6 @@ export const mutations = {
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.data, 'currentRow', {});
         Vue.set(state.data, 'currentRowSubItem', {});
-        dialogHelper.openDetailSubItem();
     }
 }
 
