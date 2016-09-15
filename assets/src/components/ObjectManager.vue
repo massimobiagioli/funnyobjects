@@ -10,10 +10,13 @@
         min-width: 200px;
         text-align: right;
     }
+    .input-group-addon-checkbox {        
+        text-align: left;
+    }
     .modal-dialog {
         width: 80%; 
         margin-left: 10%; 
-    }
+    }    
 </style>
 
 <template>
@@ -73,7 +76,7 @@
 
                         <div class="input-group">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fob_disabled">Disabilitato</span>                             
-                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fob_disabled" aria-describedby="lbl_fob_disabled" v-model="currentRow.fob_disabled | checkbox">                           
+                            <span class="form-control input-group-addon-checkbox"><input type="checkbox" id="txt_fob_disabled" v-model="currentRow.fob_disabled | checkbox"></span>                           
                         </div>                        
 
                     </div>
@@ -220,8 +223,8 @@
                         </div>
 
                         <div class="input-group">
-                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_disabled">Disabilitato</span>
-                            <input type="checkbox" class="form-control" placeholder="Disabilitato" id="txt_fio_disabled" aria-describedby="lbl_fio_disabled" v-model="currentRowSubItem.fio_disabled | checkbox">
+                            <span class="input-group-addon input-group-addon-detail" id="lbl_fio_disabled">Disabilitato</span>                            
+                            <span class="form-control input-group-addon-checkbox"><input type="checkbox" id="txt_fio_disabled" v-model="currentRowSubItem.fio_disabled | checkbox"></span>
                         </div>
 
                     </div>
