@@ -24,7 +24,12 @@ export default class {
 
     // Ricarica grid
     static reload(gridName = 'main-grid') {
-        $("#main-grid").bootgrid('reload');
+        $("#" + gridName).bootgrid('reload');
+    }
+
+    // Distrugge grid
+    static destroy(gridName = 'main-grid') {
+        $("#" + gridName).bootgrid('destroy');
     }
 
     // Restituisce impostazioni ajax per caricamento grid

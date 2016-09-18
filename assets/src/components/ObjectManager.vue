@@ -188,7 +188,7 @@
 
                         <div class="input-group">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fio_direction">Direzione</span>
-                            <select class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_direction">
+                            <select id="txt_fio_direction" class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_direction">
                                 <option>in</option>
                                 <option>out</option>
                             </select>
@@ -196,7 +196,7 @@
 
                         <div class="input-group" v-if="currentRowSubItem.fio_direction === 'out'">
                             <span class="input-group-addon input-group-addon-detail" id="lbl_fio_send_type">Tipo</span>
-                            <select class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_send_type">
+                            <select id="txt_fio_send_type" class="selectpicker form-control" style="width: 100px;" v-model="currentRowSubItem.fio_send_type">
                                 <option>cmd</option>
                                 <option>val</option>
                             </select>
@@ -252,8 +252,8 @@
 import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems, newSubItem} from '../actions'
-import {actionName, rowId, dialogTitle, currentRow, currentRowSubItem, notifyMessage} from '../getters'
+import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems, newSubItem, confirmDetailSubItem} from '../actions'
+import {actionName, rowId, parentId, dialogTitle, currentRow, currentRowSubItem, notifyMessage} from '../getters'
 import DialogNotifyMessage from './DialogNotifyMessage.vue'
 import DialogErrorMessage from './DialogErrorMessage.vue'
 
@@ -266,7 +266,7 @@ export default {
         this.modelName = 'funnyobject';
         this.modelNameSubItem = 'funnyobjectio';
         this.defaultSearchFieldName = 'fob_des';
-        this.parendFieldNameSubItem = 'fio_id';
+        this.parendFieldNameSubItem = 'fob_id';
         this.defaultSearchFieldNameSubItem = 'fio_des';
         this.backEnd = backEndFactory.create();
 
@@ -321,7 +321,7 @@ export default {
                     return {};
                 },
                 url: () => {
-                    return this.backEnd.getUrlForQuerySubItem(this.modelNameSubItem, this.rowId, originalRequest, this.parendFieldNameSubItem, this.defaultSearchFieldNameSubItem);
+                    return this.backEnd.getUrlForQuerySubItem(this.modelNameSubItem, (this.parentId || this.rowId), originalRequest, this.parendFieldNameSubItem, this.defaultSearchFieldNameSubItem);
                 },
                 labels: gridHelper.getLabels(),
                 formatters: {
@@ -368,13 +368,25 @@ export default {
                 $('#txt_fob_des').focus();
             });
 
+            // Apertura dialog dettaglio comando
+            $('#detailSubItem').on('shown.bs.modal', () => {
+                $('#txt_fio_des').focus();
+            });
+
             // Pulsante conferma dettaglio
-            $('#confirmDetail').on('click', () => {
+            $('#confirmDetailSubItem').on('click', () => {
                 let detailData = {
-                    'fob_des': $('#txt_fob_des').val(),
-                    'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
+                    'fob_id': this.parentId,
+                    'fio_des': $('#txt_fio_des').val(),
+                    'fio_direction': $('#txt_fio_direction').val(),
+                    'fio_send_type': $('#txt_fio_send_type').val(),
+                    'fio_send_cmd': $('#txt_fio_send_cmd').val(),
+                    'fio_send_vmin': $('#txt_fio_send_vmin').val(),
+                    'fio_send_vmax': $('#txt_fio_send_vmax').val(),
+                    'fio_recv_freq_polling': $('#txt_fio_recv_freq_polling').val(),
+                    'fio_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
                 };
-                this.confirmDetail(this.sender, this.modelName, detailData, this.rowId);
+                this.confirmDetailSubItem(this.sender, this.modelNameSubItem, detailData, this.rowId);
             });      
 
             // Pulsante conferma cancellazione
@@ -385,6 +397,11 @@ export default {
             // Apertura dialog comandi
             $('#commands').on('shown.bs.modal', () => {
                 this.initGridCommands();
+            });
+
+            // Chiusura dialog comandi
+            $('#commands').on('hidden.bs.modal', () => {
+                gridHelper.destroy('commands-grid');
             });
 
             // Pulsante aggiunta nuovo sottoelemento
@@ -406,11 +423,13 @@ export default {
             confirmDetail,
             confirmDelete,
             editSubItems,
-            newSubItem
+            newSubItem,
+            confirmDetailSubItem
         },
         getters: {
             actionName,
             rowId,
+            parentId,
             dialogTitle,
             currentRow,
             currentRowSubItem,

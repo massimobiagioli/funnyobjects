@@ -80,3 +80,21 @@ export const newSubItem = ({dispatch, state}, sender, modelName, parentId) => {
     dispatch('NEW_SUBITEM', sender, modelName, parentId);
     dialogHelper.openDetailSubItem();
 }
+
+// Conferma inserimento/modifica sottoelemento
+export const confirmDetailSubItem = ({dispatch, state}, sender, modelName, detailData, rowId) => {
+    let onSuccess = (data) => {
+        dispatch('CONFIRM_DETAIL_SUBITEM', sender, modelName, detailData, rowId, data);
+        dialogHelper.closeDetailSubItem();
+        dialogHelper.openNotifyMessage();
+    };
+    let onError = (req, err) => {
+        dispatch('SERVER_ERROR', sender, modelName, req, err);
+        dialogHelper.openErrorMessage();
+    }
+    if (!rowId) {
+        backEnd.insert(modelName, detailData, onSuccess, onError);
+    } else {
+        backEnd.update(modelName, rowId, detailData, onSuccess, onError);
+    }
+}

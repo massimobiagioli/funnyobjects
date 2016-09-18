@@ -55,6 +55,19 @@ export default class {
         return dialogName;
     } 
 
+    // Restituisce nome grid sottoelementi in funzione del model
+    static getSubItemsGridName(modelName) {
+        let gridName = '';
+        switch (modelName) {
+            case 'funnyobjectio':
+                gridName = 'commands-grid';
+                break;
+            default:
+                break;
+        }
+        return gridName;
+    } 
+
     // Ricava descrizione da nome model
     static modelNameToDescription(modelName) {
         let desc = '';

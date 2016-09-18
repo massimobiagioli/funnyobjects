@@ -103,8 +103,19 @@ export const mutations = {
         });
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
         Vue.set(state.data, 'currentRow', {});
-        Vue.set(state.data, 'currentRowSubItem', {});
-    }
+        Vue.set(state.data, 'currentRowSubItem', {
+            fio_direction: 'out',
+            fio_send_type: 'cmd'
+        });
+    },
+
+    // Conferma inserimento/modifica sottoelemento
+    CONFIRM_DETAIL_SUBITEM(state, sender, modelName, detailData, rowId, data) {
+        Vue.set(state.data, 'currentRowSubItem', data);
+        Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
+        Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
+        gridHelper.reload(modelHelper.getSubItemsGridName(modelName));
+    },
 }
 
 export default new Vuex.Store({
