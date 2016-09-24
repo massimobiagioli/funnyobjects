@@ -81,6 +81,25 @@ export const newSubItem = ({dispatch, state}, sender, modelName, parentId) => {
     dialogHelper.openDetailSubItem();
 }
 
+// Preparazione modifica di un sottoelemento
+export const editSubItem = ({dispatch, state}, sender, modelName, parentId, rowId) => {
+    backEnd.load(modelName, rowId, (data) => {
+        dispatch('EDIT_SUBITEM', sender, modelName, parentId, rowId, data);
+        dialogHelper.openDetailSubItem();
+    });
+}
+
+// Preparazione cancellazione di un sottoelemento
+export const deleteSubItem = ({dispatch, state}, sender, modelName, parentId, rowId) => {
+    backEnd.load(modelName, rowId, (data) => {
+        dispatch('DELETE_SUBITEM', sender, modelName, parentId, rowId, data);
+        dialogHelper.openConfirmDeleteSubItem();
+    }, (req, err) => {
+        dispatch('SERVER_ERROR', sender, modelName, req, err);
+        dialogHelper.openErrorMessage();
+    });
+}
+
 // Conferma inserimento/modifica sottoelemento
 export const confirmDetailSubItem = ({dispatch, state}, sender, modelName, detailData, rowId) => {
     let onSuccess = (data) => {
@@ -97,4 +116,18 @@ export const confirmDetailSubItem = ({dispatch, state}, sender, modelName, detai
     } else {
         backEnd.update(modelName, rowId, detailData, onSuccess, onError);
     }
+}
+
+// Conferma cancellazione sottoelemento
+export const confirmDeleteSubItem = ({dispatch, state}, sender, modelName, rowId) => {
+    let onSuccess = (data) => {
+        dispatch('CONFIRM_DELETE_SUBITEM', sender, modelName, rowId, data);
+        dialogHelper.closeConfirmDeleteSubItem();
+        dialogHelper.openNotifyMessage();
+    };
+    let onError = (req, err) => {
+        dispatch('SERVER_ERROR', sender, modelName, req, err);
+        dialogHelper.openErrorMessage();
+    }
+    backEnd.del(modelName, rowId, onSuccess, onError);
 }

@@ -110,7 +110,7 @@
                     <!-- Footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary" id="confirmDelete">Conferma</button>
+                        <button type="button" class="btn btn-primary" id="confirmActionDelete">Conferma</button>
                     </div>
 
                 </div>
@@ -239,6 +239,32 @@
             </div>
         </div>
 
+        <!-- Confirm Delete SubItem -->
+        <div class="modal fade" id="confirmDeleteSubItem" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteSubItemLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="confirmDeleteSubItemLabel">Cancellazione Comando</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div>Sei sicuro di cancellare <b>{{currentRowSubItem.fio_des}}</b>?</div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-primary" id="confirmActionDeleteSubItem">Conferma</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <!-- Notify Message -->
         <dialog-notify-message :dialog-title="dialogTitle" :notify-message="notifyMessage"></dialog-notify-message>
 
@@ -252,7 +278,7 @@
 import backEndFactory from '../backEndFactory'
 import gridHelper from '../gridHelper'
 import filters from '../filters'
-import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems, newSubItem, confirmDetailSubItem} from '../actions'
+import {resetState, newItem, editItem, deleteItem, confirmDetail, confirmDelete, editSubItems, newSubItem, editSubItem, deleteSubItem, confirmDetailSubItem, confirmDeleteSubItem} from '../actions'
 import {actionName, rowId, parentId, dialogTitle, currentRow, currentRowSubItem, notifyMessage} from '../getters'
 import DialogNotifyMessage from './DialogNotifyMessage.vue'
 import DialogErrorMessage from './DialogErrorMessage.vue'
@@ -349,10 +375,10 @@ export default {
             .on("loaded.rs.jquery.bootgrid", () => {
                 grid.find(".command-edit-subitem").on("click", (e) => {
                     let rowId = $(e.currentTarget).data("row-id");
-                    this.editItem(this.sender, this.modelName, rowId);
+                    this.editSubItem(this.sender, this.modelNameSubItem, (this.parentId || this.rowId), rowId);
                 }).end().find(".command-delete-subitem").on("click", (e) => {
                     let rowId = $(e.currentTarget).data("row-id");
-                    this.deleteItem(this.sender, this.modelName, rowId);
+                    this.deleteSubItem(this.sender, this.modelNameSubItem, (this.parentId || this.rowId), rowId);
                 });
             });
         },
@@ -374,6 +400,15 @@ export default {
             });
 
             // Pulsante conferma dettaglio
+            $('#confirmDetail').on('click', () => {
+                let detailData = {
+                    'fob_des': $('#txt_fob_des').val(),
+                    'fob_disabled': ($('#txt_fob_disabled').prop('checked') === true ? 1 : 0)
+                };
+                this.confirmDetail(this.sender, this.modelName, detailData, this.rowId);
+            });      
+
+            // Pulsante conferma dettaglio comandi
             $('#confirmDetailSubItem').on('click', () => {
                 let detailData = {
                     'fob_id': this.parentId,
@@ -390,8 +425,13 @@ export default {
             });      
 
             // Pulsante conferma cancellazione
-            $('#confirmDelete').on('click', () => {
+            $('#confirmActionDelete').on('click', () => {
                 this.confirmDelete(this.sender, this.modelName, this.rowId);
+            });
+
+            // Pulsante conferma cancellazione sottoelemento
+            $('#confirmActionDeleteSubItem').on('click', () => {
+                this.confirmDeleteSubItem(this.sender, this.modelNameSubItem, this.rowId);
             });
 
             // Apertura dialog comandi
@@ -424,7 +464,10 @@ export default {
             confirmDelete,
             editSubItems,
             newSubItem,
-            confirmDetailSubItem
+            editSubItem,
+            deleteSubItem,
+            confirmDetailSubItem,
+            confirmDeleteSubItem
         },
         getters: {
             actionName,

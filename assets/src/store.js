@@ -102,17 +102,49 @@ export const mutations = {
             parentId
         });
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
-        Vue.set(state.data, 'currentRow', {});
         Vue.set(state.data, 'currentRowSubItem', {
             fio_direction: 'out',
             fio_send_type: 'cmd'
         });
     },
 
+    // Preparazione modifica elemento esistente
+    EDIT_SUBITEM(state, sender, modelName, parentId, rowId, data) {
+        Vue.set(state, 'action', {  
+            name: 'edit',
+            sender,
+            modelName,
+            parentId,
+            rowId
+        });
+        Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
+        Vue.set(state.data, 'currentRowSubItem', data);
+    },
+
+    // Preparazione cancellazione elemento esistente
+    DELETE_SUBITEM(state, sender, modelName, parentId, rowId, data) {
+        Vue.set(state, 'action', {  
+            name: 'delete',
+            sender,
+            modelName,
+            parentId,
+            rowId
+        });
+        Vue.set(state.data, 'currentRowSubItem', data);
+    },
+
     // Conferma inserimento/modifica sottoelemento
     CONFIRM_DETAIL_SUBITEM(state, sender, modelName, detailData, rowId, data) {
         Vue.set(state.data, 'currentRowSubItem', data);
         Vue.set(state.labels, 'dialogTitle', modelHelper.getDetailDialogTitle(modelName, state.action.name));
+        Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
+        gridHelper.reload(modelHelper.getSubItemsGridName(modelName));
+    },
+
+    // Conferma cancellazione sottoelemento
+    CONFIRM_DELETE_SUBITEM(state, sender, modelName, rowId, data) {
+        Vue.set(state.data, 'currentRow', data);
+        Vue.set(state.labels, 'dialogTitle', modelHelper.getConfirmDeleteDialogTitle(modelName));
         Vue.set(state.messages, 'notify', modelHelper.getNotifyMessage(modelName, state.action.name, data));
         gridHelper.reload(modelHelper.getSubItemsGridName(modelName));
     },
